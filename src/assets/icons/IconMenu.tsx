@@ -1,0 +1,14 @@
+export default function IconMenu(props: any) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      width="1.25em"
+      height="1.25em"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      color={props.color}
+    >
+      <path d="M18 4.50014H13.5001L13.4999 0H17.9998L18 4.50014ZM4.5001 0H0V4.49995H4.4999L4.5001 0ZM11.25 0H6.75014V4.49995H11.25V0ZM18 6.75002H13.5001V11.25H18V6.75002ZM4.5001 6.75002H0V11.25H4.4999L4.5001 6.75002ZM11.25 6.75002H6.75014V11.25H11.25V6.75002ZM18 13.5H13.5001V18H18V13.5ZM4.5001 13.5H0V18H4.4999L4.5001 13.5ZM11.25 13.5H6.75014V18H11.25V13.5Z" />
+    </svg>
+  );
+}

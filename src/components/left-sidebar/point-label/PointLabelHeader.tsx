@@ -1,39 +1,26 @@
-import { Box } from "@mantine/core";
-import { MenuItemsSearch } from "../../common/menu-items-search/MenuItemsSearch";
-import { useState } from "react";
-import { HeaderWithGuildeBtn } from "../../common/header-with-guide-btn/HeaderWithGuideBtn";
-import { RecentSearchItems } from "../../common/recent-search-items/RecentSearchItems";
+import { LeftSidebarHeader } from "../../common/left-sidebar-header/LeftSidebarHeader";
 
 interface PointLabelHeaderProps {
   searchQuery: string;
+  recentSearchItems: string[];
   setSearchQuery: (query: string) => void;
   handleHelpClick: () => void;
 }
 
 export const PointLabelHeader = ({
   searchQuery,
+  recentSearchItems,
   setSearchQuery,
   handleHelpClick,
 }: PointLabelHeaderProps) => {
-  const [recentSearchItems, setRecentSearchItems] = useState<string[]>([]);
-  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
-
   return (
-    <Box>
-      <HeaderWithGuildeBtn handleHelpClick={handleHelpClick}>
-        <MenuItemsSearch
-          label="Point to Point"
-          searchQuery={searchQuery}
-          showSearchBar={showSearchBar}
-          setShowSearchBar={setShowSearchBar}
-          setSearchQuery={setSearchQuery}
-        />
-      </HeaderWithGuildeBtn>
-      {showSearchBar && (
-        <Box px="lg">
-          <RecentSearchItems recentSearchItems={recentSearchItems} />
-        </Box>
-      )}
-    </Box>
+    <LeftSidebarHeader
+      withSearch
+      headerLabel="Point Label"
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+      recentSearchItems={recentSearchItems}
+      onGuideClick={handleHelpClick}
+    />
   );
 };

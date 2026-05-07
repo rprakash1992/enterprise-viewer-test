@@ -1,12 +1,26 @@
-import { Box, Text } from "@mantine/core";
-import { HeaderWithGuildeBtn } from "../../common/header-with-guide-btn/HeaderWithGuideBtn";
+import { LeftSidebarHeader } from "../../common/left-sidebar-header/LeftSidebarHeader";
 
-export const FaceLabelsHeader = () => {
+interface FaceLabelHeaderProps {
+  searchQuery: string;
+  recentSearchItems: string[];
+  setSearchQuery: (query: string) => void;
+  handleHelpClick: () => void;
+}
+
+export const FaceLabelsHeader = ({
+  searchQuery,
+  recentSearchItems,
+  setSearchQuery,
+  handleHelpClick,
+}: FaceLabelHeaderProps) => {
   return (
-    <Box py="xs">
-      <HeaderWithGuildeBtn handleHelpClick={() => {}}>
-        <Text>Face Label</Text>
-      </HeaderWithGuildeBtn>
-    </Box>
+    <LeftSidebarHeader
+      withSearch
+      headerLabel="Face Labels"
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+      recentSearchItems={recentSearchItems}
+      onGuideClick={handleHelpClick}
+    />
   );
 };

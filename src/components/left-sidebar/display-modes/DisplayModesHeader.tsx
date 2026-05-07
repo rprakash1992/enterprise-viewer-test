@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
-import { Box, Select, Text, type ComboboxItem } from "@mantine/core";
-import { useStore } from "../../../store";
+import { Box, Select, Text } from "@mantine/core";
 import { HeaderWithGuildeBtn } from "../../common/header-with-guide-btn/HeaderWithGuideBtn";
+import type { Selection } from "../../../store/DisplayModesSlice";
+
+interface DisplayModesHeaderProps {
+  displayModeAppliedTo: Selection | null;
+  setDisplayModeAppliedTo: (val: Selection | null) => void;
+}
 
 const data = [
   {
@@ -18,16 +22,10 @@ const data = [
   },
 ];
 
-export const DisplayModesHeader = () => {
-  const setDisplayModeAppliedTo = useStore(
-    (state) => state.setDisplayModeAppliedTo
-  );
-  const [value, setValue] = useState<ComboboxItem | null>(null);
-
-  useEffect(() => {
-    setDisplayModeAppliedTo(value?.value ? value.value : null);
-  }, [value]);
-
+export const DisplayModesHeader = ({
+  displayModeAppliedTo,
+  setDisplayModeAppliedTo,
+}: DisplayModesHeaderProps) => {
   return (
     <Box py="xs">
       <HeaderWithGuildeBtn handleHelpClick={() => {}}>
@@ -38,8 +36,8 @@ export const DisplayModesHeader = () => {
           checkIconPosition="right"
           placeholder="Apply to"
           data={data}
-          value={value ? value?.value : null}
-          onChange={(_value, option) => setValue(option)}
+          value={displayModeAppliedTo}
+          onChange={(val) => setDisplayModeAppliedTo(val as Selection)}
         />
       </Box>
     </Box>

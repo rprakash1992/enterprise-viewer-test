@@ -1,9 +1,9 @@
-import { Box, Button, Divider } from "@mantine/core";
+import { useNavigate } from "react-router";
 import { ToolbarItemsHeader } from "./ToolbarItemsHeader";
+import { ToolbarItemsContent } from "./ToolbarItemsContent";
+import { ToolbarItemsFooter } from "./ToolbarItemsFooter";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { useStore } from "../../../store";
-import { CheckboxListItem } from "../../common/checkbox-list-item/CheckboxListItem";
-import type { ToolbarItem } from "../../../store/ToolbarItemsSlice";
 import { type Toolbar } from "../../../store/ToolbarsSlice";
 
 export const ToolbarItems = () => {
@@ -13,10 +13,10 @@ export const ToolbarItems = () => {
   const selectedToolbar = useStore((state) => state.selectedToolbar);
   const setToolbars = useStore((state) => state.setToolbars);
   const checkToolbarItem = useStore((state) => state.checkToolbarItem);
-  const setSelectedTabItemId = useStore((state) => state.setSelectedTabItemId);
   const setCheckedToolbarItems = useStore(
     (state) => state.setCheckedToolbarItems
   );
+  const navigate = useNavigate();
 
   const isNotEditableToolbars = !selectedToolbar?.isEditable;
 
@@ -58,7 +58,7 @@ export const ToolbarItems = () => {
     setToolbars(
       toolbars.map((item) => (item.id === newToolbar.id ? newToolbar : item))
     );
-    setSelectedTabItemId("toolbars");
+    navigate("/toolbars");
   };
 
   return (
@@ -67,48 +67,22 @@ export const ToolbarItems = () => {
         <ToolbarItemsHeader selectedToolbar={selectedToolbar} />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box mb="lg">
-          {selectedToolbar && selectedToolbar.items?.length > 0 && (
-            <Box>
-              {selectedToolbar.items.map((item: ToolbarItem) => (
-                <CheckboxListItem
-                  key={item.id}
-                  label={item.title}
-                  icon={item.icon}
-                  checked={checkedToolbarItems.includes(item.id)}
-                  setChecked={() => checkToolbarItem(item.id)}
-                  isDisabled={isNotEditableToolbars}
-                />
-              ))}
-              <Divider />
-            </Box>
-          )}
-          <CheckboxListItem
-            label="SelectAll"
-            checked={checkedToolbarItems.length === toolbarItems.length}
-            setChecked={handleCheckAll}
-            isDisabled={isNotEditableToolbars}
-          />
-          {filteredToolbarItems.map((item) => (
-            <CheckboxListItem
-              key={item.id}
-              label={item.title}
-              icon={item.icon}
-              checked={checkedToolbarItems.includes(item.id)}
-              setChecked={() => checkToolbarItem(item.id)}
-              isDisabled={isNotEditableToolbars || !selectedToolbar}
-            />
-          ))}
-        </Box>
+        <ToolbarItemsContent
+          selectedToolbar={selectedToolbar}
+          toolbarItems={toolbarItems}
+          filteredToolbarItems={filteredToolbarItems}
+          checkedToolbarItems={checkedToolbarItems}
+          isNotEditableToolbars={isNotEditableToolbars}
+          onCheckItem={checkToolbarItem}
+          onCheckAll={handleCheckAll}
+        />
       </LeftSidebarLayout.Content>
       <LeftSidebarLayout.Footer>
-        {checkedToolbarItems.length > 0 && selectedToolbar?.isEditable && (
-          <Box mx="lg" mb="xs">
-            <Button fullWidth onClick={handleSaveToolbar}>
-              Save
-            </Button>
-          </Box>
-        )}
+        <ToolbarItemsFooter
+          checkedToolbarItems={checkedToolbarItems}
+          selectedToolbar={selectedToolbar}
+          onSave={handleSaveToolbar}
+        />
       </LeftSidebarLayout.Footer>
     </LeftSidebarLayout>
   );

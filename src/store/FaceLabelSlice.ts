@@ -3,16 +3,23 @@ import type { StateCreator } from "zustand";
 export interface FaceLabel {
   id: string;
   title: string;
+  bgColor: string;
+  borderColor: string;
+  bgImage: string;
+  showBorder: boolean;
+  showBg: boolean;
+  autoFit: boolean;
+  checked: boolean;
 }
 
 export interface FaceLabelSlice {
   faceLabels: FaceLabel[];
-  selectedFaceLabel: FaceLabel | null;
 
   setFaceLabels: (items: FaceLabel[]) => void;
-  addFaceLabel: () => void;
-  deleteFaceLabel: (id: string) => void;
-  selectFaceLabel: (val: FaceLabel | null) => void;
+  addFaceLabel: (val: FaceLabel) => void;
+  updateFaceLabel: (val: FaceLabel) => void;
+  deleteFaceLabel: () => void;
+  selectFaceLabel: (noteId: string) => void;
 }
 
 export const createFaceLabelSlice: StateCreator<
@@ -23,30 +30,29 @@ export const createFaceLabelSlice: StateCreator<
 > = (set) => {
   return {
     faceLabels: [],
-    selectedFaceLabel: null,
 
     setFaceLabels: (val) => {
       set({ faceLabels: val });
     },
-    addFaceLabel: () => {
-      set((state) => {
-        const newFaceLabelId = state.faceLabels.length;
-        const newFaceLabel = {
-          id: String(newFaceLabelId),
-          title: `Face Label ${newFaceLabelId}`,
-        };
-        return { faceLabels: [...state.faceLabels, newFaceLabel] };
-      });
+    addFaceLabel: (faceLabel) => {
+      set((state) => ({ faceLabels: [...state.faceLabels, faceLabel] }));
     },
-    deleteFaceLabel: (slideId) => {
+    updateFaceLabel: (note) => {
       set((state) => ({
-        faceLabels: [
-          ...state.faceLabels.filter((slide) => slide.id !== slideId),
-        ],
+        faceLabels: state.faceLabels.map((n) => (n.id === note.id ? note : n)),
       }));
     },
-    selectFaceLabel: (val) => {
-      set({ selectedFaceLabel: val });
+    selectFaceLabel: (labellId) => {
+      set((state) => ({
+        faceLabels: state.faceLabels.map((label) =>
+          label.id === labellId ? { ...label, checked: !label.checked } : label,
+        ),
+      }));
+    },
+    deleteFaceLabel: () => {
+      set((state) => ({
+        faceLabels: state.faceLabels.filter((label) => !label.checked),
+      }));
     },
   };
 };

@@ -1,31 +1,48 @@
 import { useState } from "react";
-import { Box, Button } from "@mantine/core";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
 import { ThreePointArcLengthHeader } from "./3PointArcLengthHeader";
 import { ThreePointArcLengthFooter } from "./3PointArcLengthFooter";
-import type { TwoDNote } from "../../../store/2DNotesSlice";
+import { useNavigate } from "react-router";
+// import IconPointArcLength from "../../../assets/icons/IconPointArcLength";
+import { ThreePointArcLengthContent } from "./3PointArcLengthContent";
+import type { ThreePointArcLength as ThreePointArcLengthType } from "../../../store/LabelSlice";
 
 export const ThreePointArcLength = () => {
-  const threePointArcLengths = useStore((state) => state.threePointArcLengths);
-  const selectedThreePointArcLength = useStore(
-    (state) => state.selectedThreePointArcLength
-  );
-  const addThreePointArcLength = useStore(
-    (state) => state.addThreePointArcLength
-  );
-  const selectThreePointArcLength = useStore(
-    (state) => state.selectThreePointArcLength
-  );
+  const navigate = useNavigate();
+  const labels = useStore((state) => state.labels);
+  const selectAllLabels = useStore((state) => state.selectAllLabels);
+  const selectLabel = useStore((state) => state.selectLabel);
+  const deleteLabel = useStore((state) => state.deleteLabel);
+  // const insertTabItem = useStore((state) => state.insertTabItem);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [recentSearchItems] = useState<string[]>([]);
 
-  const handleClick = (_: React.MouseEvent, note: TwoDNote) => {
-    if (selectedThreePointArcLength?.id === note.id) {
-      selectThreePointArcLength(null);
-    } else {
-      selectThreePointArcLength(note);
-    }
+  const threePointArcLengths = labels.filter(
+    (label) => label.labelType === "threePointArcLength",
+  );
+  const checkedArcs = threePointArcLengths.filter((arc) => arc.checked);
+
+  const handleAddThreePointArcLength = () => {
+    // const newTabItem = {
+    //   id: "edit_labels",
+    //   label: "Edit Labels",
+    //   icon: IconPointArcLength,
+    //   type: "temporary" as "temporary",
+    // };
+    // insertTabItem(newTabItem);
+    navigate("/edit_labels/3_point_arc_length/new");
+  };
+
+  const handleShow = () => {};
+
+  const handleHide = () => {};
+
+  const handleInvert = () => {};
+
+  const handleDelete = () => {
+    if (checkedArcs.length <= 0) return;
+    deleteLabel("threePointArcLength");
   };
 
   return (
@@ -34,29 +51,29 @@ export const ThreePointArcLength = () => {
         <ThreePointArcLengthHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          recentSearchItems={recentSearchItems}
           handleHelpClick={() => {}}
         />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box p={"lg"}>
-          <Button fullWidth onClick={addThreePointArcLength}>
-            Add 3 Point Arc Length
-          </Button>
-        </Box>
-        <Box>
-          {threePointArcLengths.map((note) => (
-            <MenuListItem
-              key={note.id}
-              label={note.title}
-              isActive={selectedThreePointArcLength?.id === note.id}
-              onClick={(e) => handleClick(e, note)}
-            />
-          ))}
-        </Box>
+        <ThreePointArcLengthContent
+          threePointArcLengths={
+            threePointArcLengths as ThreePointArcLengthType[]
+          }
+          allChecked={checkedArcs.length === threePointArcLengths.length}
+          selectAll={() => selectAllLabels("threePointArcLength")}
+          addThreePointArcLength={handleAddThreePointArcLength}
+          handleCheck={(_, arcId) => selectLabel(arcId)}
+        />
       </LeftSidebarLayout.Content>
-      {selectedThreePointArcLength?.id && (
+      {checkedArcs.length > 0 && (
         <LeftSidebarLayout.Footer>
-          <ThreePointArcLengthFooter />
+          <ThreePointArcLengthFooter
+            handleShow={handleShow}
+            handleHide={handleHide}
+            handleInvert={handleInvert}
+            handleDelete={handleDelete}
+          />
         </LeftSidebarLayout.Footer>
       )}
     </LeftSidebarLayout>

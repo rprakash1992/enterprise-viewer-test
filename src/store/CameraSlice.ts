@@ -1,6 +1,8 @@
 import type { StateCreator } from "zustand";
 
-interface CameraAngle {
+export type CameraType = "orthographic" | "perspective"
+
+export interface CameraAngle {
   id: string;
   title: string;
 }
@@ -32,17 +34,17 @@ const allCameraAngles: CameraAngle[] = [
   },
   {
     id: "isometric",
-    title: "IcoMetric",
+    title: "Isometric",
   },
 ];
 
 export interface CameraSlice {
   cameraAngles: CameraAngle[];
   selectedCameraAngle: CameraAngle;
-  selectedCameraType: "orthographic" | "perspective";
+  selectedCameraType: CameraType;
 
   selectCameraAngle: (val: CameraAngle) => void;
-  selectCameraType: (val: "orthographic" | "perspective") => void;
+  selectCameraType: (val: CameraType) => void;
 }
 
 export const createCameraSlice: StateCreator<
@@ -57,7 +59,7 @@ export const createCameraSlice: StateCreator<
       id: "front",
       title: "Front",
     },
-    selectedCameraType: "perspective",
+    selectedCameraType: "orthographic",
 
     selectCameraAngle: (val) => {
       set({ selectedCameraAngle: val });

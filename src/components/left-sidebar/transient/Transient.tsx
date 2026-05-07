@@ -1,50 +1,62 @@
-import { Box, Button } from "@mantine/core";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import LeftSidebarLayout from "../LeftSidebarLayout";
-import { TransientHeader } from "./TransientHeader";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
-import type { ThreeDSlide } from "../../../store/3DSlidesSlice";
+import { TransientContent } from "./TransientContent";
+import { TransientHeader } from "./TransientHeader";
 import { TransientFooter } from "./TransientFooter";
 
 export const Transient = () => {
-  const transients = useStore((state) => state.transients);
-  const selectedTransient = useStore((state) => state.selectedTransient);
-  const addTransient = useStore((state) => state.addTransient);
-  const selectTransient = useStore((state) => state.selectTransient);
+  const navigate = useNavigate();
+  const animations = useStore((state) => state.animations);
+  const selectAnimation = useStore((state) => state.selectAnimation);
+  const deleteAnimation = useStore((state) => state.deleteAnimation);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const transientAnimations = animations.filter(
+    (animation) => animation.animationType === "transient",
+  );
+  const checkedTransientAnimations = transientAnimations.filter(
+    (animation) => animation.checked,
+  );
 
-  const handleClick = (_: React.MouseEvent, slide: ThreeDSlide) => {
-    if (selectedTransient?.id === slide.id) {
-      selectTransient(null);
-    } else {
-      selectTransient(slide);
-    }
+  const onAddClick = () => {
+    navigate("/edit_animation/new?from=transient");
+  };
+
+  const handlePlay = () => {};
+  const handlePause = () => {};
+  const handleEdit = () => {};
+
+  const handleDelete = () => {
+    if (checkedTransientAnimations.length <= 0) return;
+    deleteAnimation();
   };
 
   return (
     <LeftSidebarLayout>
       <LeftSidebarLayout.Header>
-        <TransientHeader />
+        <TransientHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleHelpClick={() => {}}
+        />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box p={"lg"}>
-          <Button fullWidth onClick={addTransient}>
-            Add Transient
-          </Button>
-        </Box>
-        <Box>
-          {transients.map((slide) => (
-            <MenuListItem
-              key={slide.id}
-              label={slide.title}
-              isActive={selectedTransient?.id === slide.id}
-              onClick={(e) => handleClick(e, slide)}
-            />
-          ))}
-        </Box>
+        <TransientContent
+          value="transient"
+          animations={transientAnimations}
+          onAddClick={onAddClick}
+          handleCheck={(_, animationId) => selectAnimation(animationId)}
+        />
       </LeftSidebarLayout.Content>
-      {selectedTransient?.id && (
+      {checkedTransientAnimations.length > 0 && (
         <LeftSidebarLayout.Footer>
-          <TransientFooter />
+          <TransientFooter
+            handlePlay={handlePlay}
+            handlePause={handlePause}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+          />
         </LeftSidebarLayout.Footer>
       )}
     </LeftSidebarLayout>

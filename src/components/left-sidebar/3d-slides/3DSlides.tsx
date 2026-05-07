@@ -1,23 +1,32 @@
-import { Box, Button } from "@mantine/core";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { ThreeDSlidesHeader } from "./3DSlidesHeader";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
 import type { ThreeDSlide } from "../../../store/3DSlidesSlice";
 import { ThreeDSlidesFooter } from "./3DSlidesFooter";
+import { ThreeDSlidesContent } from "./3DSlidesContent";
 
 export const ThreeDSlides = () => {
   const threeDSlides = useStore((state) => state.threeDSlides);
   const selected3DSlide = useStore((state) => state.selected3DSlide);
   const addThreeDSlide = useStore((state) => state.addThreeDSlide);
   const selectSlide = useStore((state) => state.selectSlide);
+  const deleteThreeDSlide = useStore((state) => state.deleteThreeDSlide);
 
-  const handleClick = (_: React.MouseEvent, slide: ThreeDSlide) => {
+  const handleSelectSlide = (_: React.MouseEvent, slide: ThreeDSlide) => {
     if (selected3DSlide?.id === slide.id) {
       selectSlide(null);
     } else {
       selectSlide(slide);
     }
+  };
+
+  const handleUpdate = () => {};
+
+  const handleDuplicate = () => {};
+
+  const handleDelete = () => {
+    if (!selected3DSlide?.id) return;
+    deleteThreeDSlide();
   };
 
   return (
@@ -26,25 +35,20 @@ export const ThreeDSlides = () => {
         <ThreeDSlidesHeader />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box p={"lg"}>
-          <Button fullWidth onClick={addThreeDSlide}>
-            Add 3D Slide
-          </Button>
-        </Box>
-        <Box>
-          {threeDSlides.map((slide) => (
-            <MenuListItem
-              key={slide.id}
-              label={slide.title}
-              isActive={selected3DSlide?.id === slide.id}
-              onClick={(e) => handleClick(e, slide)}
-            />
-          ))}
-        </Box>
+        <ThreeDSlidesContent
+          threeDSlides={threeDSlides}
+          selected3DSlide={selected3DSlide}
+          addThreeDSlide={addThreeDSlide}
+          selectSlide={handleSelectSlide}
+        />
       </LeftSidebarLayout.Content>
       {selected3DSlide?.id && (
         <LeftSidebarLayout.Footer>
-          <ThreeDSlidesFooter />
+          <ThreeDSlidesFooter
+            handleUpdate={handleUpdate}
+            handleDuplicate={handleDuplicate}
+            handleDelete={handleDelete}
+          />
         </LeftSidebarLayout.Footer>
       )}
     </LeftSidebarLayout>

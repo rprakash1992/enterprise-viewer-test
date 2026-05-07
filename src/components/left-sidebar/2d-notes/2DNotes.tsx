@@ -1,32 +1,46 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { useStore } from "../../../store";
 import { TwoDNotesHeader } from "./2DNotesHeader";
 import { TwoDNotesFooter } from "./2DNotesFooter";
-import type { TwoDNote } from "../../../store/2DNotesSlice";
 import { TwoDNoteContent } from "./2DNoteContent";
+import type { TwoDNote } from "../../../store/LabelSlice";
+// import IconNotes from "../../../assets/icons/IconNotes";
 
 export const TwoDNotes = () => {
-  const twoDNotes = useStore((state) => state.twoDNotes);
-  const selectedTwoDNote = useStore((state) => state.selectedTwoDNote);
-  const addTwoDNote = useStore((state) => state.addTwoDNote);
-  const selectTwoDNote = useStore((state) => state.selectTwoDNote);
+  const navigate = useNavigate();
+  const labels = useStore((state) => state.labels);
+  const selectAllLabels = useStore((state) => state.selectAllLabels);
+  const selectLabel = useStore((state) => state.selectLabel);
+  const deleteLabel = useStore((state) => state.deleteLabel);
+  // const insertTabItem = useStore((state) => state.insertTabItem);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [editing2DNote, setEditing2DNote] = useState<TwoDNote | null>(null);
+  const [recentSearchItems] = useState<string[]>([]);
 
-  const handleCheck = (
-    _: React.ChangeEvent<HTMLInputElement>,
-    note: TwoDNote
-  ) => {
-    if (selectedTwoDNote?.id === note.id) {
-      selectTwoDNote(null);
-    } else {
-      selectTwoDNote(note);
-    }
+  const twoDNotes = labels.filter((label) => label.labelType === "twoDNote");
+  const checkedNotes = twoDNotes.filter((note) => note.checked);
+
+  const handleAddTwoDNote = () => {
+    // const newTabItem = {
+    //   id: "edit_labels",
+    //   label: "Edit Labels",
+    //   icon: IconNotes,
+    //   type: "temporary" as "temporary",
+    // };
+    // insertTabItem(newTabItem);
+    navigate("/edit_labels/2d_note/new");
   };
 
-  const handleSave = () => {
-    setEditing2DNote(null);
+  const handleShow = () => {};
+
+  const handleHide = () => {};
+
+  const handleInvert = () => {};
+
+  const handleDelete = () => {
+    if (checkedNotes.length <= 0) return;
+    deleteLabel("twoDNote");
   };
 
   return (
@@ -35,26 +49,29 @@ export const TwoDNotes = () => {
         <TwoDNotesHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          recentSearchItems={recentSearchItems}
           handleHelpClick={() => {}}
         />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
         <TwoDNoteContent
-          editing2DNote={editing2DNote}
-          twoDNotes={twoDNotes}
-          selectedTwoDNote={selectedTwoDNote}
-          addTwoDNote={addTwoDNote}
-          setEditing2DNote={setEditing2DNote}
-          handleCheck={handleCheck}
+          twoDNotes={twoDNotes as TwoDNote[]}
+          allChecked={checkedNotes.length === twoDNotes.length}
+          selectAll={() => selectAllLabels("twoDNote")}
+          addTwoDNote={handleAddTwoDNote}
+          handleCheck={(_, noteId) => selectLabel(noteId)}
         />
       </LeftSidebarLayout.Content>
-      <LeftSidebarLayout.Footer>
-        <TwoDNotesFooter
-          editing2DNote={editing2DNote}
-          selectedTwoDNote={selectedTwoDNote}
-          handleSave={handleSave}
-        />
-      </LeftSidebarLayout.Footer>
+      {checkedNotes.length > 0 && (
+        <LeftSidebarLayout.Footer>
+          <TwoDNotesFooter
+            handleShow={handleShow}
+            handleHide={handleHide}
+            handleInvert={handleInvert}
+            handleDelete={handleDelete}
+          />
+        </LeftSidebarLayout.Footer>
+      )}
     </LeftSidebarLayout>
   );
 };

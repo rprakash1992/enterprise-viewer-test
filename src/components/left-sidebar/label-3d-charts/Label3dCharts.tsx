@@ -1,10 +1,9 @@
-import { Box, Button } from "@mantine/core";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { Label3DChartsHeader } from "./Label3dChartsHeader";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
 import type { ThreeDSlide } from "../../../store/3DSlidesSlice";
 import { Label3DChartsFooter } from "./Label3DChartsFooter";
+import { Label3DChartContent } from "./Label3dChartContent";
 
 export const Label3DCharts = () => {
   const label3DCharts = useStore((state) => state.label3DCharts);
@@ -26,21 +25,12 @@ export const Label3DCharts = () => {
         <Label3DChartsHeader />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box p="lg">
-          <Button fullWidth onClick={addLabel3DChart}>
-            Add 3D Charts
-          </Button>
-        </Box>
-        <Box>
-          {label3DCharts.map((slide) => (
-            <MenuListItem
-              key={slide.id}
-              label={slide.title}
-              isActive={selectedLabel3DChart?.id === slide.id}
-              onClick={(e) => handleClick(e, slide)}
-            />
-          ))}
-        </Box>
+        <Label3DChartContent
+          label3DCharts={label3DCharts}
+          selectedLabel3DChart={selectedLabel3DChart}
+          addLabel3DChart={addLabel3DChart}
+          handleClick={handleClick}
+        />
       </LeftSidebarLayout.Content>
       {selectedLabel3DChart?.id && (
         <LeftSidebarLayout.Footer>

@@ -18,6 +18,45 @@ export interface TabItem {
   type?: MenuItemType;
 }
 
+export const permanentTabItemsObj: any = {
+  menus: {
+    label: "Menus",
+    icon: IconMenu,
+  },
+  display_modes: {
+    label: "Display Modes",
+    icon: IconDisplayModes,
+  },
+  assembly_tree: {
+    label: "Assembly Tree",
+    icon: IconAssemblyTree,
+  },
+  color_map_edit: {
+    label: "Color Map Edit",
+    icon: IconColorMapEdit,
+  },
+  labels: {
+    label: "Labels",
+    icon: IconLabels,
+  },
+  clip_planes_list: {
+    label: "Clip Planes List",
+    icon: IconClipPlaneList,
+  },
+  "3d_slides": {
+    label: "3D Slides",
+    icon: IconSlides,
+  },
+  guides: {
+    label: "Guides",
+    icon: IconGuides,
+  },
+  about: {
+    label: "About",
+    icon: IconAbout,
+  },
+};
+
 const allTabItems: TabItem[] = [
   {
     id: "menus",
@@ -69,12 +108,10 @@ const allTabItems: TabItem[] = [
 export interface TabSlice {
   top: number;
   tabItems: TabItem[];
-  selectedTabItemId: string | null;
 
   setTop: (val: number) => void;
   setTabItems: (tabItems: TabItem[]) => void;
   insertTabItem: (menuItem: TabItem) => void;
-  setSelectedTabItemId: (val: string | null) => void;
   filterTempTabItems: () => void;
 }
 
@@ -87,13 +124,9 @@ export const createTabSlice: StateCreator<
   return {
     top: 0,
     tabItems: allTabItems,
-    selectedTabItemId: null,
 
     setTop: (val) => {
       set({ top: val });
-    },
-    setSelectedTabItemId: (val) => {
-      set({ selectedTabItemId: val });
     },
     setTabItems: (val) => {
       set({ tabItems: val });

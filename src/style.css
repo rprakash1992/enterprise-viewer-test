@@ -1,0 +1,59 @@
+.mrt-table-paper {
+  border: none;
+}
+
+.mantine-Table-tr .rowActions {
+  opacity: 0;
+}
+
+.mantine-Table-tr:hover .rowActions {
+  opacity: 1;
+}
+
+.MRT_TableBodyRow-module_root__2c3D4
+  td[data-column-pinned][data-column-pinned="right"][data-first-right-pinned]::before {
+  box-shadow: none;
+}
+
+.MRT_TableHeadCell-module_root__6y50a[data-column-pinned][data-column-pinned="right"][data-first-right-pinned] {
+  box-shadow: none;
+}
+
+
+
+
+
+.rc-tree-treenode {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 32px;
+  /* width: 100%; */
+  /* max-width: 100%; */
+}
+
+.rc-tree-node-content-wrapper {
+  display: flex !important;
+  flex: 1;
+  max-width: calc(100% - 18px);
+  width: calc(100% - 65px);
+  /* max-width: calc(100% - 65px); */
+}
+
+.rc-tree-title {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+}
+
+.rc-tree .rc-tree-treenode span.rc-tree-switcher.rc-tree-switcher_open {
+  background-image: none;
+}
+
+.rc-tree .rc-tree-treenode span.rc-tree-switcher.rc-tree-switcher_close {
+  background-image: none;
+}
+
+.rc-tree-list-holder {
+  overflow-x: hidden;
+}

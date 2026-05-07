@@ -3,15 +3,25 @@ import type { StateCreator } from "zustand";
 export interface TwoDNote {
   id: string;
   title: string;
+  bgColor: string;
+  borderColor: string;
+  bgImage: string;
+  showBorder: boolean;
+  showBg: boolean;
+  autoFit: boolean;
+  visibility: boolean;
+  checked: boolean;
 }
 
 export interface TwoDNotesSlice {
   twoDNotes: TwoDNote[];
-  selectedTwoDNote: TwoDNote | null;
 
+  selectAllTwoDNotes: () => void;
   setTwoDNotes: (items: TwoDNote[]) => void;
-  addTwoDNote: () => void;
-  selectTwoDNote: (item: TwoDNote | null) => void;
+  addTwoDNote: (newNote: TwoDNote) => void;
+  selectTwoDNote: (noteId: string) => void;
+  updateTwoDNote: (item: TwoDNote) => void;
+  deleteTwoDNote: () => void;
 }
 
 export const createTwoDNotesSlice: StateCreator<
@@ -22,23 +32,40 @@ export const createTwoDNotesSlice: StateCreator<
 > = (set) => {
   return {
     twoDNotes: [],
-    selectedTwoDNote: null,
 
+    selectAllTwoDNotes: () => {
+      set((state) => {
+        const allChecked = state.twoDNotes.every((note) => note.checked);
+        return {
+          twoDNotes: state.twoDNotes.map((n) => ({
+            ...n,
+            checked: allChecked ? false : true,
+          })),
+        };
+      });
+    },
     setTwoDNotes: (val) => {
       set({ twoDNotes: val });
     },
-    addTwoDNote: () => {
-      set((state) => {
-        const newNoteId = state.twoDNotes.length;
-        const newNote = {
-          id: String(newNoteId),
-          title: `Note ${newNoteId}`,
-        };
-        return { twoDNotes: [...state.twoDNotes, newNote] };
-      });
+    addTwoDNote: (newNote) => {
+      set((state) => ({ twoDNotes: [...state.twoDNotes, newNote] }));
     },
-    selectTwoDNote: (val) => {
-      set({ selectedTwoDNote: val });
+    selectTwoDNote: (noteId) => {
+      set((state) => ({
+        twoDNotes: state.twoDNotes.map((note) =>
+          note.id === noteId ? { ...note, checked: !note.checked } : note,
+        ),
+      }));
+    },
+    updateTwoDNote: (note) => {
+      set((state) => ({
+        twoDNotes: state.twoDNotes.map((n) => (n.id === note.id ? note : n)),
+      }));
+    },
+    deleteTwoDNote: () => {
+      set((state) => ({
+        twoDNotes: state.twoDNotes.filter((note) => !note.checked),
+      }));
     },
   };
 };

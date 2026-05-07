@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Box, Select, Text, type ComboboxItem } from "@mantine/core";
+import { HeaderWithGuildeBtn } from "../../common/header-with-guide-btn/HeaderWithGuideBtn";
 
 const data = [
   {
-    label: "Syatem",
+    label: "System",
     value: "system",
   },
   {
@@ -13,18 +14,22 @@ const data = [
 ];
 
 export const StepsHeader = () => {
-  const [value, setValue] = useState<ComboboxItem | null>(null);
+  const [value, setValue] = useState<ComboboxItem | null>(data[0]);
 
   return (
-    <Box px={"lg"} py={"xs"}>
-      <Text mb={"xs"}>Steps & Subcases</Text>
-      <Select
-        checkIconPosition="right"
-        placeholder="Apply to"
-        data={data}
-        value={value ? value?.value : null}
-        onChange={(_value, option) => setValue(option)}
-      />
+    <Box py="xs">
+      <HeaderWithGuildeBtn handleHelpClick={() => {}}>
+        <Text>Steps & Subcases</Text>
+      </HeaderWithGuildeBtn>
+      <Box mt="xs" px="lg">
+        <Select
+          checkIconPosition="right"
+          placeholder="Apply to"
+          data={data}
+          value={value ? value?.value : null}
+          onChange={(_value, option) => setValue(option)}
+        />
+      </Box>
     </Box>
   );
 };

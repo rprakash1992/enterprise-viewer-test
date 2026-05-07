@@ -36,6 +36,8 @@ import IconTransient from "../assets/icons/IconTransient";
 import IconToolbar from "../assets/icons/IconToolbar";
 import IconToolbarPosition from "../assets/icons/IconToolbarPosition";
 import IconToolbarItems from "../assets/icons/IconToolbarItems";
+import IconMenu from "../assets/icons/IconMenu";
+import IconXYPlot from "../assets/icons/IconXYPlot";
 
 export interface MenuItem {
   id: string;
@@ -43,6 +45,214 @@ export interface MenuItem {
   icon: any;
   isDisabled?: boolean;
 }
+
+export const allMenuItemsObj: any = {
+  menus: {
+    label: "Menus",
+    icon: IconMenu,
+  },
+  "2d_notes": {
+    label: "2D Notes",
+    icon: IconNotes,
+  },
+  "2d_plots": {
+    label: "2D Plots",
+    icon: IconXYPlot,
+  },
+  "3_point_arc_length": {
+    label: "3 Point Arc Length",
+    icon: IconPointArcLength,
+  },
+  "3d_slides": {
+    label: "3D Slides",
+    icon: IconSlides,
+  },
+  about: {
+    label: "About",
+    icon: IconAbout,
+  },
+  animations: {
+    label: "Animations",
+    icon: IconAnimation,
+  },
+  // view_add_animation: {
+  //   label: "Animation Edit",
+  //   icon: IconLinearAnimation,
+  // },
+  assembly_tree: {
+    label: "Assembly Tree",
+    icon: IconAssemblyTree,
+  },
+  average_options: {
+    label: "Average Options",
+    icon: IconAbout,
+  },
+  axis_triad: {
+    label: "Axis Triad",
+    icon: IconAxisTriad,
+  },
+  background: {
+    label: "Background",
+    icon: IconBackground,
+  },
+  camera: {
+    label: "Camera",
+    icon: IconCamera,
+  },
+  chatbot: {
+    label: "Chatbot",
+    icon: IconPoint,
+    isDisabled: true,
+  },
+  clip_planes_list: {
+    label: "Clip Planes List",
+    icon: IconClipPlaneList,
+  },
+  color_map_edit: {
+    label: "Color Map Edit",
+    icon: IconColorMapEdit,
+  },
+  color_map_list: {
+    label: "Color Map List",
+    icon: IconAbout,
+  },
+  color_palette: {
+    label: "Color Palette",
+    icon: IconAbout,
+  },
+  color_palette_edit: {
+    label: "Color Palette Edit",
+    icon: IconAbout,
+  },
+  color_theme: {
+    label: "Color Theme",
+    icon: IconColorTheme,
+  },
+  derived_types: {
+    label: "Derived Type",
+    icon: IconDerivedTypes,
+  },
+  display_modes: {
+    label: "Display Modes",
+    icon: IconDisplayModes,
+  },
+  face_label: {
+    label: "Face Label",
+    icon: IconFaceLabel,
+  },
+  geometry: {
+    label: "Geometry",
+    icon: IconGeometry,
+  },
+  geometry_transform: {
+    label: "Geometry Transform",
+    icon: IconGeometryTransform,
+  },
+  guides: {
+    label: "Guides",
+    icon: IconGuides,
+  },
+  history: {
+    label: "History",
+    icon: IconHistory,
+  },
+  label_3d_chart: {
+    label: "Label 3D Chart",
+    icon: Icon3DCharts,
+  },
+  label_template: {
+    label: "Label Template",
+    icon: IconPoint,
+    isDisabled: true,
+  },
+  labels: {
+    label: "Labels",
+    icon: IconLabels,
+  },
+  legend_setting: {
+    label: "Legend Setting",
+    icon: IconLegendSettings,
+  },
+  linear_animations: {
+    label: "Linear Animations",
+    icon: IconLinearAnimation,
+  },
+  mouse_controls: {
+    label: "Mouse Controls",
+    icon: IconMouseControls,
+  },
+  parts_list: {
+    label: "Parts List",
+    icon: IconAssemblyTree,
+  },
+  point_label: {
+    label: "Point Label",
+    icon: IconPointLabel,
+  },
+  point_to_point: {
+    label: "Point to Point",
+    icon: IconPointToPoint,
+  },
+  section_list: {
+    label: "Section List",
+    icon: IconClipPlanes,
+    isDisabled: true,
+  },
+  section_settings: {
+    label: "Section Settings",
+    icon: IconClipPlaneSetting,
+    isDisabled: true,
+  },
+  section_transform: {
+    label: "Section Transform",
+    icon: IconClipPlaneTransform,
+    isDisabled: true,
+  },
+  simple_chat_bot: {
+    label: "Simple Chat Bot",
+    icon: IconLabels,
+  },
+  steps_and_subcase: {
+    label: "Steps and Subcase",
+    icon: IconStepsAndSubcase,
+  },
+  toolbar_items: {
+    label: "Tool Bar Items",
+    icon: IconToolbarItems,
+  },
+  toolbar_position: {
+    label: "Tool Bar Position",
+    icon: IconToolbarPosition,
+  },
+  toolbars: {
+    label: "Toolbars",
+    icon: IconToolbar,
+  },
+  transient: {
+    label: "Transient",
+    icon: IconTransient,
+  },
+  "value-setting": {
+    label: "Value Setting",
+    icon: IconValueSettings,
+  },
+  variable: {
+    label: "Variable",
+    icon: IconField,
+  },
+  eigen_vector_animations: {
+    label: "Vector Animations",
+    icon: IconEigen,
+  },
+  edit_labels: {
+    label: "Edit Labels",
+    icon: IconLabels,
+  },
+  edit_animation: {
+    label: "Edit Animation",
+    icon: IconLinearAnimation,
+  }
+};
 
 const allMenuItems: MenuItem[] = [
   {
@@ -53,7 +263,7 @@ const allMenuItems: MenuItem[] = [
   {
     id: "2d_plots",
     label: "2D Plots",
-    icon: IconAbout,
+    icon: IconXYPlot,
   },
   {
     id: "3_point_arc_length",
@@ -193,8 +403,8 @@ const allMenuItems: MenuItem[] = [
     icon: IconLegendSettings,
   },
   {
-    id: "linear_animation",
-    label: "Linear Animation",
+    id: "linear_animations",
+    label: "Linear Animations",
     icon: IconLinearAnimation,
   },
   {
@@ -276,8 +486,8 @@ const allMenuItems: MenuItem[] = [
     icon: IconField,
   },
   {
-    id: "vector_animation",
-    label: "Vector Animation",
+    id: "eigen_vector_animations",
+    label: "Vector Animations",
     icon: IconEigen,
   },
 ];

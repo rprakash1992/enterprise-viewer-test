@@ -3,16 +3,25 @@ import type { StateCreator } from "zustand";
 export interface PointToPoint {
   id: string;
   title: string;
+  bgColor: string;
+  borderColor: string;
+  bgImage: string;
+  showBorder: boolean;
+  showBg: boolean;
+  autoFit: boolean;
+  visibility: boolean;
+  checked: boolean;
 }
 
 export interface PointToPointSlice {
   pointToPoints: PointToPoint[];
-  selectedPointToPoint: PointToPoint | null;
 
+  selectAllPointToPoints: () => void;
   setPointToPoints: (items: PointToPoint[]) => void;
-  addPointToPoint: () => void;
-  deletePointToPoint: (id: string) => void;
-  selectPointToPoint: (val: PointToPoint | null) => void;
+  addPointToPoint: (newItem: PointToPoint) => void;
+  selectPointToPoint: (id: string) => void;
+  updatePointToPoint: (item: PointToPoint) => void;
+  deletePointToPoint: () => void;
 }
 
 export const createPointToPointSlice: StateCreator<
@@ -23,30 +32,42 @@ export const createPointToPointSlice: StateCreator<
 > = (set) => {
   return {
     pointToPoints: [],
-    selectedPointToPoint: null,
 
+    selectAllPointToPoints: () => {
+      set((state) => {
+        const allChecked = state.pointToPoints.every((item) => item.checked);
+        return {
+          pointToPoints: state.pointToPoints.map((item) => ({
+            ...item,
+            checked: allChecked ? false : true,
+          })),
+        };
+      });
+    },
     setPointToPoints: (val) => {
       set({ pointToPoints: val });
     },
-    addPointToPoint: () => {
-      set((state) => {
-        const newPointToPointId = state.pointToPoints.length;
-        const newPointToPoint = {
-          id: String(newPointToPointId),
-          title: `Point to Point ${newPointToPointId}`,
-        };
-        return { pointToPoints: [...state.pointToPoints, newPointToPoint] };
-      });
+    addPointToPoint: (newItem) => {
+      set((state) => ({ pointToPoints: [...state.pointToPoints, newItem] }));
     },
-    deletePointToPoint: (slideId) => {
+    selectPointToPoint: (id) => {
       set((state) => ({
-        pointToPoints: [
-          ...state.pointToPoints.filter((slide) => slide.id !== slideId),
-        ],
+        pointToPoints: state.pointToPoints.map((item) =>
+          item.id === id ? { ...item, checked: !item.checked } : item,
+        ),
       }));
     },
-    selectPointToPoint: (val) => {
-      set({ selectedPointToPoint: val });
+    updatePointToPoint: (item) => {
+      set((state) => ({
+        pointToPoints: state.pointToPoints.map((p) =>
+          p.id === item.id ? item : p,
+        ),
+      }));
+    },
+    deletePointToPoint: () => {
+      set((state) => ({
+        pointToPoints: state.pointToPoints.filter((item) => !item.checked),
+      }));
     },
   };
 };

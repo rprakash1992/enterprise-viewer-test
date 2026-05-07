@@ -40,11 +40,6 @@ import {
   type Label3DChartSlice,
 } from "./Label3DChartSlice";
 import {
-  createVectorAnimationSlice,
-  type VectorAnimationSlice,
-} from "./VectorAnimationSlice";
-import { createTransientSlice, type TransientSlice } from "./TransientSlice";
-import {
   createToolbarPositionSlice,
   type ToolbarPositionSlice,
 } from "./ToolbarPositionSlice";
@@ -62,10 +57,17 @@ import {
   createMouseControlSlice,
   type MouseControlSlice,
 } from "./MouseControlsSlice";
+import { createAnimationsSlice, type AnimationsSlice } from "./AnimationsSlice";
+import { createClipPlaneSlice, type ClipPlaneSlice } from "./ClipPlaneSlice";
 import {
-  createLinearAnimationSlice,
-  type LinearAnimationSlice,
-} from "./LinearAnimationSlice";
+  createColorPaletteSlice,
+  type ColorPaletteSlice,
+} from "./ColorPaletteSlice";
+import {
+  createGeometryTransformSlice,
+  type GeometryTransformSlice,
+} from "./GeometryTransformSlice";
+import { createLabelSlice, type LabelSlice } from "./LabelSlice";
 
 export const useStore = create<
   TabSlice &
@@ -86,15 +88,17 @@ export const useStore = create<
     FaceLabelSlice &
     HistorySlice &
     Label3DChartSlice &
-    VectorAnimationSlice &
-    TransientSlice &
     ToolbarPositionSlice &
     ToolbarsSlice &
     ToolbarItemsSlice &
     PointToPointSlice &
     PointLabelSlice &
     MouseControlSlice &
-    LinearAnimationSlice
+    AnimationsSlice &
+    ClipPlaneSlice &
+    ColorPaletteSlice &
+    GeometryTransformSlice &
+    LabelSlice
 >()(
   devtools((...a) => ({
     ...createTabSlice(...a),
@@ -115,14 +119,16 @@ export const useStore = create<
     ...createFaceLabelSlice(...a),
     ...createHistorySlice(...a),
     ...createLabel3DChartSlice(...a),
-    ...createVectorAnimationSlice(...a),
-    ...createTransientSlice(...a),
     ...createToolbarPositionSlice(...a),
     ...createToolbarSlice(...a),
     ...createToolbarItemsSlice(...a),
     ...createPointToPointSlice(...a),
     ...createPointLabelSlice(...a),
     ...createMouseControlSlice(...a),
-    ...createLinearAnimationSlice(...a),
-  }))
+    ...createAnimationsSlice(...a),
+    ...createClipPlaneSlice(...a),
+    ...createColorPaletteSlice(...a),
+    ...createGeometryTransformSlice(...a),
+    ...createLabelSlice(...a),
+  })),
 );

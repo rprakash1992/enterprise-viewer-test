@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { GuidesHeader } from "./GuidesHeader";
+import { GuidesContent } from "./GuidesContent";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
-import type { GuideItem } from "../../../store/GuidesSlide";
+import type { GuideItem } from "../../../store/GuidesSlice";
 import { useDebounce } from "../../../hooks/useDebounce";
 
 export const Guides = () => {
@@ -33,10 +33,8 @@ export const Guides = () => {
           handleHelpClick={() => {}}
         />
       </LeftSidebarLayout.Header>
-      <LeftSidebarLayout.Content>
-        {filteredItems.map((item) => (
-          <MenuListItem key={item.id} label={item.title} />
-        ))}
+      <LeftSidebarLayout.Content noPadding>
+        <GuidesContent filteredItems={filteredItems} />
       </LeftSidebarLayout.Content>
     </LeftSidebarLayout>
   );

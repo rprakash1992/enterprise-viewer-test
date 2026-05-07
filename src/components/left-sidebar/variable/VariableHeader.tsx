@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Box, Select, Text, type ComboboxItem } from "@mantine/core";
+import { HeaderWithGuildeBtn } from "../../common/header-with-guide-btn/HeaderWithGuideBtn";
 
 const data = [
   {
@@ -16,15 +17,19 @@ export const VariableHeader = () => {
   const [value, setValue] = useState<ComboboxItem | null>(null);
 
   return (
-    <Box px={"lg"} py={"xs"}>
-      <Text mb={"xs"}>Variable</Text>
-      <Select
-        checkIconPosition="right"
-        placeholder="Apply to"
-        data={data}
-        value={value ? value?.value : null}
-        onChange={(_value, option) => setValue(option)}
-      />
+    <Box py="xs">
+      <HeaderWithGuildeBtn handleHelpClick={() => {}}>
+        <Text>Variable</Text>
+      </HeaderWithGuildeBtn>
+      <Box mt="xs" px="lg">
+        <Select
+          checkIconPosition="right"
+          placeholder="Apply to"
+          data={data}
+          value={value ? value?.value : null}
+          onChange={(_value, option) => setValue(option)}
+        />
+      </Box>
     </Box>
   );
 };

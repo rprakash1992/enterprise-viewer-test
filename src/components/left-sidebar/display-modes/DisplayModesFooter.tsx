@@ -1,16 +1,26 @@
 import { Box, Button } from "@mantine/core";
-import { useStore } from "../../../store";
 
-export const DisplayModesFooter = () => {
-  const selectedDisplayMode = useStore((state) => state.selectedDisplayMode);
-  const handleDownloadAndShow = useStore(
-    (state) => state.handleDownloadAndShow
-  );
+interface DisplayModesFooterProps {
+  downloadSize: number;
+  unit: string;
+  isDownloading: boolean;
+  handleDownloadDisplayModes: () => void;
+}
 
+export const DisplayModesFooter = ({
+  downloadSize,
+  unit,
+  isDownloading,
+  handleDownloadDisplayModes,
+}: DisplayModesFooterProps) => {
   return (
     <Box p="lg">
-      <Button fullWidth onClick={handleDownloadAndShow}>
-        Download & Show ({selectedDisplayMode?.size} MB)
+      <Button
+        loading={isDownloading}
+        fullWidth
+        onClick={handleDownloadDisplayModes}
+      >
+        Download & Show ({downloadSize} {unit})
       </Button>
     </Box>
   );

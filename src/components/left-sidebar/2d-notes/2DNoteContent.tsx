@@ -1,63 +1,77 @@
+import { useNavigate } from "react-router";
 import { Box, Button, Flex } from "@mantine/core";
-import { CheckboxListItem } from "../../common/checkbox-list-item/CheckboxListItem";
-import { Edit2DNote } from "./Edit2DNote";
-import type { TwoDNote } from "../../../store/2DNotesSlice";
-import { CustomThemeIcon } from "../../common/custom-theme-icon/CustomThemeIcon";
-import IconPopOut from "../../../assets/icons/IconPopout";
 import { IconEye, IconPencil } from "@tabler/icons-react";
+import { CheckboxListItem } from "../../common/checkbox-list-item/CheckboxListItem";
+// import type { TwoDNote } from "../../../store/2DNotesSlice";
+import { CustomActionIcon } from "../../common/custom-action-icon/CustomActionIcon";
+import IconPopOut from "../../../assets/icons/IconPopout";
+import type { TwoDNote } from "../../../store/LabelSlice";
 
 export const TwoDNoteContent = ({
-  editing2DNote,
   twoDNotes,
-  selectedTwoDNote,
+  allChecked,
+  selectAll,
   addTwoDNote,
-  setEditing2DNote,
   handleCheck,
 }: {
-  editing2DNote: TwoDNote | null;
   twoDNotes: TwoDNote[];
-  selectedTwoDNote: TwoDNote | null;
+  allChecked: boolean;
+  selectAll: () => void;
   addTwoDNote: () => void;
-  setEditing2DNote: (val: TwoDNote | null) => void;
-  handleCheck: (e: React.ChangeEvent<HTMLInputElement>, val: TwoDNote) => void;
+  handleCheck: (e: React.ChangeEvent<HTMLInputElement>, noteId: string) => void;
 }) => {
+  const navigate = useNavigate();
+
   const getHoveredIcons = (note: TwoDNote) => {
     return (
       <Flex direction="row" align="center" gap="3px">
-        <CustomThemeIcon
+        <CustomActionIcon
           size="sm"
           icon={<IconPopOut width="13px" height="13px" />}
+          withTooltip
+          tooltipLabel="Popout"
         />
-        <CustomThemeIcon
+        <CustomActionIcon
           size="sm"
           icon={<IconPencil stroke={1} />}
-          onClick={() => setEditing2DNote(note)}
+          onClick={() => navigate(`/edit_labels/2d_note/${note?.id}`)}
+          withTooltip
+          tooltipLabel="Edit"
         />
-        <CustomThemeIcon size="sm" icon={<IconEye stroke={1} />} />
+        <CustomActionIcon
+          size="sm"
+          icon={<IconEye stroke={1} />}
+          withTooltip
+          tooltipLabel={note.visibility ? "Hide" : "Show"}
+          onClick={() => {}}
+        />
       </Flex>
     );
   };
 
-  return !editing2DNote?.id ? (
+  return (
     <Box>
-      <Box p={"lg"}>
-        <Button fullWidth onClick={addTwoDNote}>
-          Add 2D Note
-        </Button>
-      </Box>
+      <Button fullWidth onClick={addTwoDNote} mb="lg">
+        Add 2D Note
+      </Button>
       <Box>
+        {twoDNotes.length > 0 && (
+          <CheckboxListItem
+            label="Select All"
+            checked={allChecked}
+            setChecked={selectAll}
+          />
+        )}
         {twoDNotes.map((note) => (
           <CheckboxListItem
             key={note.id}
             label={note.title}
-            checked={selectedTwoDNote?.id === note.id}
-            setChecked={(e) => handleCheck(e, note)}
+            checked={note.checked}
+            setChecked={(e) => handleCheck(e, note.id)}
             hoveredIcons={getHoveredIcons(note)}
           />
         ))}
       </Box>
     </Box>
-  ) : (
-    <Edit2DNote editing2DNote={editing2DNote} />
   );
 };

@@ -1,19 +1,20 @@
+import { useNavigate } from "react-router";
 import { useStore } from "../../../store";
 import type { Variable as VariableType } from "../../../store/VariableSlice";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { VariableHeader } from "./VariableHeader";
+import { VariableContent } from "./VariableContent";
 
 export const Variable = () => {
   const variables = useStore((state) => state.variables);
   const appliedVariable = useStore((state) => state.appliedVariable);
   const applyVariable = useStore((state) => state.applyVariable);
-  const setSelectedTabItemId = useStore((state) => state.setSelectedTabItemId);
   const filterTempTabItems = useStore((state) => state.filterTempTabItems);
+  const navigate = useNavigate();
 
   const handleClick = (variable: VariableType) => {
     applyVariable(variable);
-    setSelectedTabItemId("color_map_edit");
+    navigate("/color_map_edit");
     filterTempTabItems();
   };
 
@@ -22,15 +23,12 @@ export const Variable = () => {
       <LeftSidebarLayout.Header>
         <VariableHeader />
       </LeftSidebarLayout.Header>
-      <LeftSidebarLayout.Content>
-        {variables.map((item) => (
-          <MenuListItem
-            key={item.id}
-            label={item.title}
-            isActive={appliedVariable.id === item.id}
-            onClick={() => handleClick(item)}
-          />
-        ))}
+      <LeftSidebarLayout.Content noPadding>
+        <VariableContent
+          variables={variables}
+          appliedVariable={appliedVariable}
+          handleClick={handleClick}
+        />
       </LeftSidebarLayout.Content>
     </LeftSidebarLayout>
   );

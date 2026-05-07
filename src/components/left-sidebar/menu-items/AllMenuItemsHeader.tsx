@@ -15,7 +15,7 @@ export const AllMenuItemsHeader = ({
   setSearchQuery,
   handleHelpClick,
 }: AllMenuItemsProps) => {
-  const [recentSearchItems, setRecentSearchItems] = useState<string[]>([]);
+  const [recentSearchItems] = useState<string[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
   return (

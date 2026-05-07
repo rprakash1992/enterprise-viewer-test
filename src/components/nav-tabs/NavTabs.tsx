@@ -1,8 +1,11 @@
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { Box } from "@mantine/core";
 import { OneNavTabItem } from "./OneNavTabItem";
 import { useStore } from "../../store";
 import { NAV_TAB_HEIGHT } from "../../constants";
-import { useEffect } from "react";
+import { allMenuItemsObj } from "../../store/MenuSlice";
+import { permanentTabItemsObj, type TabItem } from "../../store/TabsSlice";
 
 const ActiveTabBorder = ({ top }: { top: number }) => (
   <Box
@@ -23,32 +26,39 @@ export const NavTabs = () => {
   const tabItems = useStore((state) => state.tabItems);
   const setTop = useStore((state) => state.setTop);
   const setTabItems = useStore((state) => state.setTabItems);
-  const selectedTabItemId = useStore((state) => state.selectedTabItemId);
-  const setSelectedTabItemId = useStore((state) => state.setSelectedTabItemId);
+  const navigate = useNavigate();
+  let { pathname } = useLocation();
+  const arr = pathname.split("/");
+  const menuItemIdInPathname = arr[1];
 
   const handleClick = (menuItemId: string) => {
-    setSelectedTabItemId(selectedTabItemId === menuItemId ? null : menuItemId);
-    // const updatedTabItems = tabItems.filter(
-    //   (item) => item.type !== "temporary" || menuItemId === item.id
-    // );
-    // setTabItems(updatedTabItems);
+    navigate(pathname === `/${menuItemId}` ? "/" : `/${menuItemId}`);
   };
-
-  // useEffect(() => {
-  //   const index = tabItems.findIndex((item) => item.id === selectedTabItemId);
-  //   setTop(index * NAV_TAB_HEIGHT);
-  // }, [selectedTabItemId, tabItems]);
 
   useEffect(() => {
     const updatedTabItems = tabItems.filter(
-      (item) => item.type !== "temporary" || selectedTabItemId === item.id
+      (item) => item.type !== "temporary"
     );
+
+    const isPermanentTabItem = permanentTabItemsObj[menuItemIdInPathname];
+    const menuItem = allMenuItemsObj[menuItemIdInPathname];
+    if (!isPermanentTabItem && menuItem) {
+      const newItem: TabItem = {
+        id: menuItemIdInPathname,
+        label: allMenuItemsObj[menuItemIdInPathname]?.label,
+        icon: allMenuItemsObj[menuItemIdInPathname]?.icon,
+        type: "temporary",
+      };
+      updatedTabItems.push(newItem);
+    }
+
     const index = updatedTabItems.findIndex(
-      (item) => item.id === selectedTabItemId
+      (item) => item.id === menuItemIdInPathname
     );
+
     setTop(index * NAV_TAB_HEIGHT);
     setTabItems(updatedTabItems);
-  }, [selectedTabItemId, tabItems.length]);
+  }, [pathname]);
 
   return (
     <Box style={{ position: "relative" }}>

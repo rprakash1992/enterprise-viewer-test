@@ -1,5 +1,5 @@
+import { useLocation, useNavigate } from "react-router";
 import { Drawer } from "@mantine/core";
-import { useStore } from "../../store";
 import { AllMenuItems } from "./menu-items/AllMenuItems";
 import { DisplayModes } from "./display-modes/DisplayModes";
 import { ColorMapEdit } from "./color-map-edit/ColorMapEdit";
@@ -24,7 +24,7 @@ import { ColorTheme } from "./color-theme/ColorTheme";
 import { FaceLabels } from "./face-labels/FaceLabels";
 import { History } from "./history/History";
 import { Label3DCharts } from "./label-3d-charts/Label3dCharts";
-import { VectorAnimation } from "./vector-animation/VectorAnimation";
+import { EigenVectorAnimations } from "./eigen-vector-animations/EigenVectorAnimations";
 import { Transient } from "./transient/Transient";
 import { ToolbarPosition } from "./toolbar-position/ToolbarPosition";
 import { Toolbars } from "./toolbars/Toolbars";
@@ -32,20 +32,34 @@ import { ToolbarItems } from "./toolbar-items/ToolbarItems";
 import { PointToPoint } from "./point-to-point/PointToPoint";
 import { PointLabel } from "./point-label/PointLabel";
 import { MouseControls } from "./mouse-controls/MouseControls";
-import { LinearAnimation } from "./linear-animation/LinearAnimation";
+import { LinearAnimations } from "./linear-animations/LinearAnimations";
+// import { EditTwoDPlot } from "./edit-2d-plot/Edit2DPlot";
+import { EditAnimation } from "./edit-animation/EditAnimation";
+import { LabelEdit } from "./label-edit/LabelEdit";
+import { AverageOptions } from "./average-options/AverageOptions";
+import { ColorPalette } from "./color-palette/ColorPalette";
+import { Geometry } from "./geometry/Geometry";
+import { GeometryTransform } from "./geometry-transform/GeometryTransform";
 
 export const LeftSidebar = () => {
-  const selectedTabItemId = useStore((state) => state.selectedTabItemId);
-  const setSelectedTabItemId = useStore((state) => state.setSelectedTabItemId);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  // const matchEditTwoDPlot = useMatch("/edit_2d_plot/:param");
+  // const matchViewAddAnimation = useMatch("/view_add_animation/:param");
+  const pathnameArr = pathname.split("/");
+
+  const basePath = "/" + pathnameArr[1];
 
   return (
     <Drawer
       withCloseButton={false}
-      opened={!!selectedTabItemId}
-      onClose={() => setSelectedTabItemId(null)}
+      opened={!!pathname.slice(1)}
+      onClose={() => navigate("/")}
       styles={{
         body: {
           padding: 0,
+          maxWidth: 320,
+          position: "relative",
         },
         inner: {
           marginLeft: NAV_TAB_WIDTH,
@@ -62,38 +76,46 @@ export const LeftSidebar = () => {
         transition: "fade-right",
       }}
     >
-      {selectedTabItemId === "menus" && <AllMenuItems />}
-      {selectedTabItemId === "display_modes" && <DisplayModes />}
-      {selectedTabItemId === "color_map_edit" && <ColorMapEdit />}
-      {selectedTabItemId === "labels" && <Labels />}
-      {selectedTabItemId === "clip_planes_list" && <ClipPlanes />}
-      {selectedTabItemId === "assembly_tree" && <AssemblyTree />}
-      {selectedTabItemId === "3d_slides" && <ThreeDSlides />}
-      {selectedTabItemId === "guides" && <Guides />}
-      {selectedTabItemId === "about" && <About />}
-      {selectedTabItemId === "variable" && <Variable />}
-      {selectedTabItemId === "steps_and_subcase" && <Steps />}
-      {selectedTabItemId === "derived_types" && <DerivedTypes />}
-      {selectedTabItemId === "2d_notes" && <TwoDNotes />}
-      {selectedTabItemId === "2d_plots" && <TwoDPlots />}
-      {selectedTabItemId === "3_point_arc_length" && <ThreePointArcLength />}
-      {selectedTabItemId === "animations" && <Animations />}
-      {selectedTabItemId === "axis_triad" && <AxisTriad />}
-      {selectedTabItemId === "background" && <Background />}
-      {selectedTabItemId === "camera" && <Camera />}
-      {selectedTabItemId === "color_theme" && <ColorTheme />}
-      {selectedTabItemId === "face_label" && <FaceLabels />}
-      {selectedTabItemId === "history" && <History />}
-      {selectedTabItemId === "label_3d_chart" && <Label3DCharts />}
-      {selectedTabItemId === "linear_animation" && <LinearAnimation />}
-      {selectedTabItemId === "mouse_controls" && <MouseControls />}
-      {selectedTabItemId === "point_label" && <PointLabel />}
-      {selectedTabItemId === "point_to_point" && <PointToPoint />}
-      {selectedTabItemId === "toolbar_items" && <ToolbarItems />}
-      {selectedTabItemId === "toolbar_position" && <ToolbarPosition />}
-      {selectedTabItemId === "toolbars" && <Toolbars />}
-      {selectedTabItemId === "transient" && <Transient />}
-      {selectedTabItemId === "vector_animation" && <VectorAnimation />}
+      {pathname === "/menus" && <AllMenuItems />}
+      {pathname === "/display_modes" && <DisplayModes />}
+      {pathname === "/color_map_edit" && <ColorMapEdit />}
+      {pathname === "/labels" && <Labels />}
+      {basePath === "/edit_labels" && <LabelEdit />}
+      {pathname === "/clip_planes_list" && <ClipPlanes />}
+      {pathname === "/assembly_tree" && <AssemblyTree />}
+      {pathname === "/3d_slides" && <ThreeDSlides />}
+      {pathname === "/guides" && <Guides />}
+      {pathname === "/about" && <About />}
+      {pathname === "/variable" && <Variable />}
+      {pathname === "/steps_and_subcase" && <Steps />}
+      {pathname === "/derived_types" && <DerivedTypes />}
+      {pathname === "/2d_notes" && <TwoDNotes />}
+      {pathname === "/2d_plots" && <TwoDPlots />}
+      {/* {matchEditTwoDPlot && <EditTwoDPlot />} */}
+      {pathname === "/3_point_arc_length" && <ThreePointArcLength />}
+      {pathname === "/animations" && <Animations />}
+      {/* {matchViewAddAnimation && <EditAnimation />} */}
+      {basePath === "/edit_animation" && <EditAnimation />}
+      {pathname === "/axis_triad" && <AxisTriad />}
+      {pathname === "/background" && <Background />}
+      {pathname === "/camera" && <Camera />}
+      {pathname === "/color_theme" && <ColorTheme />}
+      {pathname === "/face_label" && <FaceLabels />}
+      {pathname === "/history" && <History />}
+      {pathname === "/label_3d_chart" && <Label3DCharts />}
+      {pathname === "/linear_animations" && <LinearAnimations />}
+      {pathname === "/mouse_controls" && <MouseControls />}
+      {pathname === "/point_label" && <PointLabel />}
+      {pathname === "/point_to_point" && <PointToPoint />}
+      {pathname === "/toolbar_items" && <ToolbarItems />}
+      {pathname === "/toolbar_position" && <ToolbarPosition />}
+      {pathname === "/toolbars" && <Toolbars />}
+      {pathname === "/transient" && <Transient />}
+      {pathname === "/eigen_vector_animations" && <EigenVectorAnimations />}
+      {pathname === "/average_options" && <AverageOptions />}
+      {pathname === "/color_palette" && <ColorPalette />}
+      {pathname === "/geometry" && <Geometry />}
+      {pathname === "/geometry_transform" && <GeometryTransform />}
     </Drawer>
   );
 };

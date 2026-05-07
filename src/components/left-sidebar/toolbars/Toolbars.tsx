@@ -1,10 +1,9 @@
-import { Box, Button } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { useNavigate } from "react-router";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { ToolbarsHeader } from "./ToolbarHeader";
 import { ToolbarsFooter } from "./ToolbarsFooter";
+import { ToolbarsContent } from "./ToolbarsContent";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
 import type { Toolbar } from "../../../store/ToolbarsSlice";
 
 export const Toolbars = () => {
@@ -14,9 +13,9 @@ export const Toolbars = () => {
   const selectedToolbar = useStore((state) => state.selectedToolbar);
   const selectToolbar = useStore((state) => state.selectToolbar);
   const insertTabItem = useStore((state) => state.insertTabItem);
-  const setSelectedTabItemId = useStore((state) => state.setSelectedTabItemId);
   const addToolbar = useStore((state) => state.addToolbar);
   const setToolbars = useStore((state) => state.setToolbars);
+  const navigate = useNavigate();
 
   const handleClick = (toolbar: Toolbar) => {
     if (selectedToolbar?.id === toolbar?.id) {
@@ -34,19 +33,10 @@ export const Toolbars = () => {
     if (!isItemAlreadyPresentInTabs) {
       insertTabItem({ ...item!, type: "temporary" });
     }
-    setSelectedTabItemId(tabItemId);
+    navigate(`/${tabItemId}`);
   };
 
   const handleTransformToolbar = () => {
-    // const tabItemId = "toolbar_position";
-    // const item = menuItems.find((i) => i.id === tabItemId);
-
-    // const isItemAlreadyPresentInTabs = tabItems.find((i) => i.id === item?.id);
-
-    // if (!isItemAlreadyPresentInTabs) {
-    //   insertTabItem({ ...item!, type: "temporary" });
-    // }
-    // setSelectedTabItemId(tabItemId);
     navigateToTab("toolbar_position");
   };
 
@@ -62,29 +52,10 @@ export const Toolbars = () => {
     };
     addToolbar(newToolbar);
     selectToolbar(newToolbar);
-
-    // const tabItemId = "toolbar_items";
-    // const item = menuItems.find((i) => i.id === tabItemId);
-
-    // const isItemAlreadyPresentInTabs = tabItems.find((i) => i.id === item?.id);
-
-    // if (!isItemAlreadyPresentInTabs) {
-    //   insertTabItem({ ...item!, type: "temporary" });
-    // }
-    // setSelectedTabItemId(tabItemId);
     navigateToTab("toolbar_items");
   };
 
   const handleEditToolbar = () => {
-    // const tabItemId = "toolbar_items";
-    // const item = menuItems.find((i) => i.id === tabItemId);
-
-    // const isItemAlreadyPresentInTabs = tabItems.find((i) => i.id === item?.id);
-
-    // if (!isItemAlreadyPresentInTabs) {
-    //   insertTabItem({ ...item!, type: "temporary" });
-    // }
-    // setSelectedTabItemId(tabItemId);
     navigateToTab("toolbar_items");
   };
 
@@ -99,22 +70,12 @@ export const Toolbars = () => {
         <ToolbarsHeader />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box p="lg">
-          <Button fullWidth onClick={handleAddToolbar}>
-            Add Toolbar
-          </Button>
-        </Box>
-        <Box>
-          {toolbars.map((toolbar) => (
-            <MenuListItem
-              key={toolbar.id}
-              label={toolbar.title}
-              isActive={selectedToolbar?.id === toolbar.id}
-              onClick={() => handleClick(toolbar)}
-              rightIcon={selectedToolbar?.id === toolbar.id ? IconCheck : null}
-            />
-          ))}
-        </Box>
+        <ToolbarsContent
+          toolbars={toolbars}
+          selectedToolbar={selectedToolbar}
+          onAddToolbar={handleAddToolbar}
+          onClickToolbar={handleClick}
+        />
       </LeftSidebarLayout.Content>
       <LeftSidebarLayout.Footer>
         {selectedToolbar && (

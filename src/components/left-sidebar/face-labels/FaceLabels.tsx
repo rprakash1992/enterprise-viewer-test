@@ -1,49 +1,62 @@
-import { Box, Button } from "@mantine/core";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
-import type { ThreeDSlide } from "../../../store/3DSlidesSlice";
 import { FaceLabelsHeader } from "./FaceLabelsHeader";
 import { FaceLabelsFooter } from "./FaceLabelsFooter";
+import { FaceLabelsContent } from "./FaceLabelsContent";
 
 export const FaceLabels = () => {
+  const navigate = useNavigate();
   const faceLabels = useStore((state) => state.faceLabels);
-  const selectedFaceLabel = useStore((state) => state.selectedFaceLabel);
-  const addFaceLabel = useStore((state) => state.addFaceLabel);
   const selectFaceLabel = useStore((state) => state.selectFaceLabel);
+  const deleteFaceLabel = useStore((state) => state.deleteFaceLabel);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [recentSearchItems] = useState<string[]>([]);
 
-  const handleClick = (_: React.MouseEvent, slide: ThreeDSlide) => {
-    if (selectedFaceLabel?.id === slide.id) {
-      selectFaceLabel(null);
-    } else {
-      selectFaceLabel(slide);
-    }
+  const checkedLabels = faceLabels.filter((label) => label.checked);
+
+  const handleAddFaceLabel = () => {
+    navigate("/edit_labels/face_label/new");
+  };
+
+  const handleShow = () => {};
+
+  const handleHide = () => {};
+
+  const handleInvert = () => {};
+
+  const handleDelete = () => {
+    if (checkedLabels.length <= 0) return;
+    deleteFaceLabel();
   };
 
   return (
     <LeftSidebarLayout>
       <LeftSidebarLayout.Header>
-        <FaceLabelsHeader />
+        <FaceLabelsHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          recentSearchItems={recentSearchItems}
+          handleHelpClick={() => {}}
+        />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box p={"lg"}>
-          <Button fullWidth onClick={addFaceLabel}>
-            Add Face Label
-          </Button>
-        </Box>
-        <Box>
-          {faceLabels.map((slide) => (
-            <MenuListItem
-              key={slide.id}
-              label={slide.title}
-              isActive={selectedFaceLabel?.id === slide.id}
-              onClick={(e) => handleClick(e, slide)}
-            />
-          ))}
-        </Box>
+        <FaceLabelsContent
+          faceLabels={faceLabels}
+          addFaceLabel={handleAddFaceLabel}
+          handleCheck={(_, labelId) => selectFaceLabel(labelId)}
+        />
       </LeftSidebarLayout.Content>
       <LeftSidebarLayout.Footer>
-        {selectedFaceLabel?.id && <FaceLabelsFooter />}
+        {checkedLabels?.length > 0 && (
+          <FaceLabelsFooter
+            handleShow={handleShow}
+            handleHide={handleHide}
+            handleInvert={handleInvert}
+            handleDelete={handleDelete}
+          />
+        )}
       </LeftSidebarLayout.Footer>
     </LeftSidebarLayout>
   );

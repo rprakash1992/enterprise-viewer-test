@@ -1,4 +1,4 @@
-import { Flex, Text } from "@mantine/core";
+import { Flex, Switch, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { useColors } from "../../../hooks/useColors";
 
@@ -9,7 +9,10 @@ interface MenuListItemProps {
   height?: number;
   isActive?: boolean;
   isDisabled?: boolean;
+  withSwitch?: boolean;
+  switchChecked?: boolean;
   onClick?: (e: React.MouseEvent) => void;
+  onSwitchChange?: (val: boolean) => void;
 }
 
 export const MenuListItem = ({
@@ -19,7 +22,10 @@ export const MenuListItem = ({
   height,
   isActive,
   isDisabled,
+  withSwitch,
+  switchChecked,
   onClick,
+  onSwitchChange,
 }: MenuListItemProps) => {
   const { ref, hovered } = useHover();
   const {
@@ -41,11 +47,12 @@ export const MenuListItem = ({
       px={"lg"}
       style={{
         cursor: isDisabled ? "no-drop" : "pointer",
+        opacity: isDisabled ? 0.5 : 1,
         backgroundColor: isActive
           ? activeBgColor
           : hovered
-          ? hoverBgColor
-          : undefined,
+            ? hoverBgColor
+            : undefined,
       }}
     >
       <Flex direction={"row"} align={"center"}>
@@ -55,8 +62,8 @@ export const MenuListItem = ({
               isActive
                 ? activeIconColor
                 : hovered
-                ? textColor
-                : "var(--mantine-color-dimmed)"
+                  ? textColor
+                  : "var(--mantine-color-dimmed)"
             }
           />
         )}
@@ -75,9 +82,15 @@ export const MenuListItem = ({
             isActive
               ? activeIconColor
               : hovered
-              ? textColor
-              : "var(--mantine-color-dimmed)"
+                ? textColor
+                : "var(--mantine-color-dimmed)"
           }
+        />
+      )}
+      {withSwitch && onSwitchChange && (
+        <Switch
+          checked={switchChecked}
+          onChange={(event) => onSwitchChange(event.currentTarget.checked)}
         />
       )}
     </Flex>

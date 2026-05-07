@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { IconArrowNarrowRight } from "@tabler/icons-react";
-import { ActionIcon, Flex, Select, type ComboboxItem } from "@mantine/core";
+import { useNavigate } from "react-router";
 import LeftSidebarLayout from "../LeftSidebarLayout";
 import { AnimationsHeader } from "./AnimationsHeader";
 import { AnimationsFooter } from "./AnimationsFooter";
+import { AnimationsContent } from "./AnimationsContent";
+import { useStore } from "../../../store";
 
 const data = [
   { label: "Linear", value: "linear" },
@@ -11,7 +11,29 @@ const data = [
 ];
 
 export const Animations = () => {
-  const [value, setValue] = useState<ComboboxItem | null>(null);
+  const navigate = useNavigate();
+  const animations = useStore((state) => state.animations);
+  const animationType = useStore((state) => state.animationType);
+  const selectAnimation = useStore((state) => state.selectAnimation);
+  const setAnimationType = useStore((state) => state.setAnimationType);
+  const deleteAnimation = useStore((state) => state.deleteAnimation);
+
+  const checkedAnimations = animations.filter((animation) => animation.checked);
+
+  const onAddClick = () => {
+    navigate(`/edit_animation/new?from=animations`);
+  };
+
+  const handlePlay = () => {};
+
+  const handlePause = () => {};
+
+  const handleEdit = () => {};
+
+  const handleDelete = () => {
+    if (checkedAnimations.length <= 0) return;
+    deleteAnimation();
+  };
 
   return (
     <LeftSidebarLayout>
@@ -19,48 +41,25 @@ export const Animations = () => {
         <AnimationsHeader />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Flex p={"lg"} align={"center"}>
-          <Select
-            checkIconPosition="right"
-            placeholder="Select animation"
-            data={data}
-            value={value ? value?.value : null}
-            onChange={(_value, option) => setValue(option)}
-            flex={1}
-            styles={{
-              input: {
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-              },
-            }}
-          />
-          <ActionIcon
-            h={36}
-            w={36}
-            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-            disabled={!value}
-          >
-            <IconArrowNarrowRight />
-          </ActionIcon>
-        </Flex>
+        <AnimationsContent
+          data={data}
+          value={animationType}
+          animations={animations}
+          setValue={setAnimationType}
+          onAddClick={onAddClick}
+          handleCheck={(_, animationId) => selectAnimation(animationId)}
+        />
       </LeftSidebarLayout.Content>
-      <LeftSidebarLayout.Footer>
-        <AnimationsFooter />
-      </LeftSidebarLayout.Footer>
+      {checkedAnimations.length > 0 && (
+        <LeftSidebarLayout.Footer>
+          <AnimationsFooter
+            handlePlay={handlePlay}
+            handlePause={handlePause}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+          />
+        </LeftSidebarLayout.Footer>
+      )}
     </LeftSidebarLayout>
   );
-  // return (
-  //   <Box>
-  //     <DisplayModesHeader />
-  //     <Divider orientation="horizontal" />
-  //     {displayModesItems.map((item) => (
-  //       <OneDisplayModeItem
-  //         key={item.id}
-  //         label={item.label}
-  //         icon={item.icon}
-  //         onClick={() => {}}
-  //       />
-  //     ))}
-  //   </Box>
-  // );
 };

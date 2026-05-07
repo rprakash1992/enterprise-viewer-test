@@ -13,6 +13,7 @@ export const useColors = () => {
   const activeIconColor = "#fff";
   const activeTextColor = "#fff";
   const activeBgColor = "var(--mantine-color-blue-5)";
+  const disabledTextColor = "var(--mantine-color-disabled)";
 
   return {
     textColor,
@@ -20,5 +21,6 @@ export const useColors = () => {
     activeIconColor,
     activeTextColor,
     activeBgColor,
+    disabledTextColor,
   };
 };

@@ -3,16 +3,25 @@ import type { StateCreator } from "zustand";
 export interface PointLabel {
   id: string;
   title: string;
+  bgColor: string;
+  borderColor: string;
+  bgImage: string;
+  showBorder: boolean;
+  showBg: boolean;
+  autoFit: boolean;
+  visibility: boolean;
+  checked: boolean;
 }
 
 export interface PointLabelSlice {
   pointLabels: PointLabel[];
-  selectedPointLabel: PointLabel | null;
 
-  setPointLabel: (items: PointLabel[]) => void;
-  addPointLabel: () => void;
-  deletePointLabel: (id: string) => void;
-  selectPointLabel: (val: PointLabel | null) => void;
+  selectAllPointLabels: () => void;
+  setPointLabels: (items: PointLabel[]) => void;
+  addPointLabel: (newLabel: PointLabel) => void;
+  selectPointLabel: (id: string) => void;
+  updatePointLabel: (item: PointLabel) => void;
+  deletePointLabel: () => void;
 }
 
 export const createPointLabelSlice: StateCreator<
@@ -23,30 +32,42 @@ export const createPointLabelSlice: StateCreator<
 > = (set) => {
   return {
     pointLabels: [],
-    selectedPointLabel: null,
 
-    setPointLabel: (val) => {
-      set({ pointLabels: val });
-    },
-    addPointLabel: () => {
+    selectAllPointLabels: () => {
       set((state) => {
-        const newPointLabelId = state.pointLabels.length;
-        const newPointLabel = {
-          id: String(newPointLabelId),
-          title: `Point label ${newPointLabelId}`,
+        const allChecked = state.pointLabels.every((label) => label.checked);
+        return {
+          pointLabels: state.pointLabels.map((label) => ({
+            ...label,
+            checked: allChecked ? false : true,
+          })),
         };
-        return { pointLabels: [...state.pointLabels, newPointLabel] };
       });
     },
-    deletePointLabel: (slideId) => {
+    setPointLabels: (val) => {
+      set({ pointLabels: val });
+    },
+    addPointLabel: (newNote) => {
+      set((state) => ({ pointLabels: [...state.pointLabels, newNote] }));
+    },
+    selectPointLabel: (id) => {
       set((state) => ({
-        pointLabels: [
-          ...state.pointLabels.filter((slide) => slide.id !== slideId),
-        ],
+        pointLabels: state.pointLabels.map((label) =>
+          label.id === id ? { ...label, checked: !label.checked } : label,
+        ),
       }));
     },
-    selectPointLabel: (val) => {
-      set({ selectedPointLabel: val });
+    updatePointLabel: (item) => {
+      set((state) => ({
+        pointLabels: state.pointLabels.map((label) =>
+          label.id === item.id ? item : label,
+        ),
+      }));
+    },
+    deletePointLabel: () => {
+      set((state) => ({
+        pointLabels: state.pointLabels.filter((label) => !label.checked),
+      }));
     },
   };
 };

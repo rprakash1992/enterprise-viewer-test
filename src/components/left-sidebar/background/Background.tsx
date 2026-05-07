@@ -1,12 +1,9 @@
-import { Box, ColorPicker, Flex } from "@mantine/core";
-import { BackgroundHeader } from "./BackgroundHeader";
-import LeftSidebarLayout from "../LeftSidebarLayout";
-import { useStore } from "../../../store";
 import { useState } from "react";
+import { BackgroundHeader } from "./BackgroundHeader";
+import { BackgroundContent } from "./BackgroundContent";
+import LeftSidebarLayout from "../LeftSidebarLayout";
 
 export const Background = () => {
-  const selectedBgColor = useStore((state) => state.selectedBgColor);
-  const setBgColor = useStore((state) => state.setBgColor);
   const [bgType, setBgType] = useState<"color" | "image">("color");
 
   return (
@@ -15,17 +12,7 @@ export const Background = () => {
         <BackgroundHeader bgType={bgType} setBgType={setBgType} />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Flex justify="center" align="center" pt="xs">
-          {bgType === "color" ? (
-            <ColorPicker
-              format="rgba"
-              value={selectedBgColor}
-              onChange={setBgColor}
-            />
-          ) : (
-            <Box>Dropzone</Box>
-          )}
-        </Flex>
+        <BackgroundContent bgType={bgType} />
       </LeftSidebarLayout.Content>
     </LeftSidebarLayout>
   );

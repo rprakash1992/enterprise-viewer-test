@@ -11,7 +11,7 @@ export interface ThreeDSlidesSlice {
 
   setThreeDSlides: (items: ThreeDSlide[]) => void;
   addThreeDSlide: () => void;
-  deleteThreeDSlide: (id: string) => void;
+  deleteThreeDSlide: () => void;
   selectSlide: (val: ThreeDSlide | null) => void;
 }
 
@@ -38,10 +38,12 @@ export const createThreeDSlidesSlice: StateCreator<
         return { threeDSlides: [...state.threeDSlides, newSlide] };
       });
     },
-    deleteThreeDSlide: (slideId) => {
+    deleteThreeDSlide: () => {
       set((state) => ({
         threeDSlides: [
-          ...state.threeDSlides.filter((slide) => slide.id !== slideId),
+          ...state.threeDSlides.filter(
+            (slide) => slide.id !== state.selected3DSlide?.id,
+          ),
         ],
       }));
     },

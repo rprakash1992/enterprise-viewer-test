@@ -1,17 +1,27 @@
 import type { StateCreator } from "zustand";
 
-export interface TwoDNote {
+export interface ThreePointArcLength {
   id: string;
   title: string;
+  bgColor: string;
+  borderColor: string;
+  bgImage: string;
+  showBorder: boolean;
+  showBg: boolean;
+  autoFit: boolean;
+  visibility: boolean;
+  checked: boolean;
 }
 
 export interface ThreePointArcLengthSlice {
-  threePointArcLengths: TwoDNote[];
-  selectedThreePointArcLength: TwoDNote | null;
+  threePointArcLengths: ThreePointArcLength[];
 
-  setThreePointArcLengths: (items: TwoDNote[]) => void;
-  addThreePointArcLength: () => void;
-  selectThreePointArcLength: (item: TwoDNote | null) => void;
+  selectAllThreePointArcLengths: () => void;
+  setThreePointArcLengths: (items: ThreePointArcLength[]) => void;
+  addThreePointArcLength: (newArc: ThreePointArcLength) => void;
+  selectThreePointArcLength: (arcId: string) => void;
+  updateThreePointArcLength: (item: ThreePointArcLength) => void;
+  deleteThreePointArcLength: () => void;
 }
 
 export const createThreePointArcLengthSlice: StateCreator<
@@ -22,28 +32,49 @@ export const createThreePointArcLengthSlice: StateCreator<
 > = (set) => {
   return {
     threePointArcLengths: [],
-    selectedThreePointArcLength: null,
 
-    setThreePointArcLengths: (val) => {
-      set({ threePointArcLengths: val });
-    },
-    addThreePointArcLength: () => {
+    selectAllThreePointArcLengths: () => {
       set((state) => {
-        const newThreePointArcLengthId = state.threePointArcLengths.length;
-        const newThreePointArcLength = {
-          id: String(newThreePointArcLengthId),
-          title: `Item ${newThreePointArcLengthId}`,
-        };
+        const allChecked = state.threePointArcLengths.every(
+          (arc) => arc.checked,
+        );
+
         return {
-          threePointArcLengths: [
-            ...state.threePointArcLengths,
-            newThreePointArcLength,
-          ],
+          threePointArcLengths: state.threePointArcLengths.map((arc) => ({
+            ...arc,
+            checked: allChecked ? false : true,
+          })),
         };
       });
     },
-    selectThreePointArcLength: (val) => {
-      set({ selectedThreePointArcLength: val });
+    setThreePointArcLengths: (val) => {
+      set({ threePointArcLengths: val });
+    },
+    addThreePointArcLength: (newArc) => {
+      set((state) => ({
+        threePointArcLengths: [...state.threePointArcLengths, newArc],
+      }));
+    },
+    selectThreePointArcLength: (arcId) => {
+      set((state) => ({
+        threePointArcLengths: state.threePointArcLengths.map((arc) =>
+          arc.id === arcId ? { ...arc, checked: !arc.checked } : arc,
+        ),
+      }));
+    },
+    updateThreePointArcLength: (arc) => {
+      set((state) => ({
+        threePointArcLengths: state.threePointArcLengths.map((n) =>
+          n.id === arc.id ? arc : n,
+        ),
+      }));
+    },
+    deleteThreePointArcLength: () => {
+      set((state) => ({
+        threePointArcLengths: state.threePointArcLengths.filter(
+          (arc) => !arc.checked,
+        ),
+      }));
     },
   };
 };

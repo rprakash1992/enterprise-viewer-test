@@ -1,12 +1,24 @@
-import { Box, Text } from "@mantine/core";
-import { HeaderWithGuildeBtn } from "../../common/header-with-guide-btn/HeaderWithGuideBtn";
+import { LeftSidebarHeader } from "../../common/left-sidebar-header/LeftSidebarHeader";
 
-export const TransientHeader = () => {
+interface TransientHeaderProps {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  handleHelpClick: () => void;
+}
+
+export const TransientHeader = ({
+  searchQuery,
+  setSearchQuery,
+  handleHelpClick,
+}: TransientHeaderProps) => {
   return (
-    <Box py="xs">
-      <HeaderWithGuildeBtn handleHelpClick={() => {}}>
-        <Text>Transient</Text>
-      </HeaderWithGuildeBtn>
-    </Box>
+    <LeftSidebarHeader
+      withSearch
+      headerLabel="Transients"
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+      recentSearchItems={[]}
+      onGuideClick={handleHelpClick}
+    />
   );
 };

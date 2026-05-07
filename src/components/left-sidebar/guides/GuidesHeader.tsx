@@ -15,7 +15,7 @@ export const GuidesHeader = ({
   setSearchQuery,
   handleHelpClick,
 }: GuidesHeaderProps) => {
-  const [recentSearchItems, setRecentSearchItems] = useState<string[]>([]);
+  const [recentSearchItems] = useState<string[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
   return (

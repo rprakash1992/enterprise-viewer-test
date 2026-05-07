@@ -1,25 +1,38 @@
 import { useState } from "react";
-import { Box, Button } from "@mantine/core";
+import { useNavigate } from "react-router";
 import LeftSidebarLayout from "../LeftSidebarLayout";
-import { PointLabelHeader } from "./PointLabelHeader";
 import { useStore } from "../../../store";
-import { MenuListItem } from "../../common/menu-list-item/MenuListItem";
-import type { ThreeDSlide } from "../../../store/3DSlidesSlice";
+import { PointLabelHeader } from "./PointLabelHeader";
 import { PointLabelFooter } from "./PointLabelFooter";
+import { PointLabelContent } from "./PointLabelContent";
+import type { PointLabel as PointLabelType } from "../../../store/LabelSlice";
 
 export const PointLabel = () => {
-  const pointLabels = useStore((state) => state.pointLabels);
-  const selectedPointLabel = useStore((state) => state.selectedPointLabel);
-  const addPointLabel = useStore((state) => state.addPointLabel);
-  const selectPointLabel = useStore((state) => state.selectPointLabel);
+  const navigate = useNavigate();
+  const labels = useStore((state) => state.labels);
+  const selectAllLabels = useStore((state) => state.selectAllLabels);
+  const selectLabel = useStore((state) => state.selectLabel);
+  const deleteLabel = useStore((state) => state.deleteLabel);
+  // const addPointLabel = useStore((state) => state.addPointLabel);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [recentSearchItems] = useState<string[]>([]);
 
-  const handleClick = (_: React.MouseEvent, slide: ThreeDSlide) => {
-    if (selectedPointLabel?.id === slide.id) {
-      selectPointLabel(null);
-    } else {
-      selectPointLabel(slide);
-    }
+  const pointLabels = labels.filter(
+    (label) => label.labelType === "pointLabel",
+  );
+  const checkedLabels = pointLabels.filter((label) => label.checked);
+
+  const handleAddPointLabel = () => {
+    navigate("/edit_labels/point_label/new");
+  };
+
+  const handleShow = () => {};
+  const handleHide = () => {};
+  const handleInvert = () => {};
+
+  const handleDelete = () => {
+    if (checkedLabels.length <= 0) return;
+    deleteLabel("pointLabel");
   };
 
   return (
@@ -28,29 +41,30 @@ export const PointLabel = () => {
         <PointLabelHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          recentSearchItems={recentSearchItems}
           handleHelpClick={() => {}}
         />
       </LeftSidebarLayout.Header>
       <LeftSidebarLayout.Content>
-        <Box p={"lg"}>
-          <Button fullWidth onClick={addPointLabel}>
-            Add Point Label
-          </Button>
-        </Box>
-        <Box>
-          {pointLabels.map((point) => (
-            <MenuListItem
-              key={point.id}
-              label={point.title}
-              isActive={selectedPointLabel?.id === point.id}
-              onClick={(e) => handleClick(e, point)}
-            />
-          ))}
-        </Box>
+        <PointLabelContent
+          pointLabels={pointLabels as PointLabelType[]}
+          allChecked={
+            checkedLabels.length === pointLabels.length &&
+            pointLabels.length > 0
+          }
+          selectAll={() => selectAllLabels("pointLabel")}
+          addPointLabel={handleAddPointLabel}
+          handleCheck={(_, labelId) => selectLabel(labelId)}
+        />
       </LeftSidebarLayout.Content>
-      {selectedPointLabel?.id && (
+      {checkedLabels.length > 0 && (
         <LeftSidebarLayout.Footer>
-          <PointLabelFooter />
+          <PointLabelFooter
+            handleShow={handleShow}
+            handleHide={handleHide}
+            handleInvert={handleInvert}
+            handleDelete={handleDelete}
+          />
         </LeftSidebarLayout.Footer>
       )}
     </LeftSidebarLayout>

@@ -1,6 +1,6 @@
+import type { JSX } from "react";
 import { Checkbox, Flex, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
-import type { JSX } from "react";
 
 interface CheckboxListItemProps {
   height?: number;
@@ -8,7 +8,7 @@ interface CheckboxListItemProps {
   label: string;
   icon?: any;
   checked: boolean;
-  hoveredIcons: JSX.Element;
+  hoveredIcons?: JSX.Element;
   setChecked: (e: React.ChangeEvent<HTMLInputElement>, val: boolean) => void;
 }
 
@@ -24,7 +24,7 @@ export const CheckboxListItem = ({
   const { ref, hovered } = useHover();
 
   return (
-    <Flex ref={ref} direction="row" align="center" px="lg" h={height ?? 40}>
+    <Flex ref={ref} direction="row" align="center" h={height ?? 40}>
       <Checkbox
         disabled={isDisabled}
         checked={checked}

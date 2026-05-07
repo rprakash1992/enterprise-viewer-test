@@ -1,13 +1,19 @@
-import { Flex } from "@mantine/core";
-import { IconCopyCheck, IconRestore, IconTrash } from "@tabler/icons-react";
-import { LeftSidebarFooterIconItem } from "../../common/left-sidebar-footer-icon-item/LeftSidebarFooterIconItem";
+import { LeftSidebarFooterIcons } from "../../common/left-sidebar-footer-icons/LeftSidebarFooterIcons";
 
-export const ThreeDSlidesFooter = () => {
+export const ThreeDSlidesFooter = ({
+  handleUpdate,
+  handleDuplicate,
+  handleDelete,
+}: {
+  handleUpdate: (e: React.MouseEvent) => void;
+  handleDuplicate: (e: React.MouseEvent) => void;
+  handleDelete: (e: React.MouseEvent) => void;
+}) => {
   return (
-    <Flex direction={"row"} h={60} align={"center"} justify={"space-around"}>
-      <LeftSidebarFooterIconItem icon={IconRestore} label="Setting" />
-      <LeftSidebarFooterIconItem icon={IconCopyCheck} label="Duplicate" />
-      <LeftSidebarFooterIconItem icon={IconTrash} label="Delete" />
-    </Flex>
+    <LeftSidebarFooterIcons
+      handleUpdate={handleUpdate}
+      handleDuplicate={handleDuplicate}
+      handleDelete={handleDelete}
+    />
   );
 };

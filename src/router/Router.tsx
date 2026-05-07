@@ -8,7 +8,8 @@ const PageNotFound = () => {
 
 const Router = () => {
   return (
-    <BrowserRouter basename="/enterpriseviewer">
+    // <BrowserRouter basename="/enterpriseviewer">
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route path="/menus" element={<></>} />
